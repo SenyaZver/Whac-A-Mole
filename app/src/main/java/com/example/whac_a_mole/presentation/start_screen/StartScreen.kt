@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,7 +43,7 @@ fun StartScreen(
 
         Spacer(modifier = Modifier.height(spacerHeight))
 
-        Image(painter = painterResource(R.drawable.ic_mole2), contentDescription = "Mole")
+        Image(painter = painterResource(R.drawable.ic_mole21), contentDescription = "Mole")
 
         Spacer(modifier = Modifier.height(spacerHeight * 2))
 
@@ -65,14 +66,16 @@ fun StartScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(spacerHeight))
-
 
         Box(modifier = Modifier
             .fillMaxWidth()
             .weight(1f)
-            .background(MaterialTheme.colors.primary)) {
-
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_grass),
+                contentScale = ContentScale.Crop,
+                contentDescription = "Grass"
+            )
         }
 
 

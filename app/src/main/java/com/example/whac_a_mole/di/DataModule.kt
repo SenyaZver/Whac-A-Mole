@@ -2,6 +2,7 @@ package com.example.whac_a_mole.di
 
 import android.content.Context
 import com.example.whac_a_mole.data.DataSourceImpl
+import com.example.whac_a_mole.data.Game
 import com.example.whac_a_mole.domain.DataSource
 import dagger.Module
 import dagger.Provides
@@ -21,5 +22,11 @@ object DataModule {
         return DataSourceImpl(appContext)
     }
 
+
+    @Provides
+    @Singleton
+    fun getGame(dataSource: DataSource): Game {
+        return Game(dataSource)
+    }
 
 }

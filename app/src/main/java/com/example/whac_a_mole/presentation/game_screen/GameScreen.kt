@@ -1,7 +1,6 @@
 package com.example.whac_a_mole.presentation.game_screen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,8 +21,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.whac_a_mole.common.Constants.amountOfHoles
 import com.example.whac_a_mole.common.Constants.resultScreenRoute
-import com.example.whac_a_mole.domain.DataSource
-import com.example.whac_a_mole.presentation.game_screen.hole.HoleState
 import com.example.whac_a_mole.presentation.theme.Dimensions.spacerHeight
 
 
@@ -99,11 +96,8 @@ fun GameScreen(
         }
 
 
-
-
         if (state.value.timeLeft == 0L) {
-            val score = viewModel.getScore()
-            viewModel.saveScore(score)
+            viewModel.saveScore(state.value.score)
 
             LaunchedEffect(Unit) {
                 navController.navigate(resultScreenRoute)
