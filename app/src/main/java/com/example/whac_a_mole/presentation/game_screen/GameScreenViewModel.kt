@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.whac_a_mole.common.Constants.amountOfHoles
 import com.example.whac_a_mole.common.Constants.gameDuration
 import com.example.whac_a_mole.domain.DataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -51,7 +52,7 @@ class GameScreenViewModel @Inject constructor(
                 timeLeft = _uiState.value.timeLeft,
                 score = _uiState.value.score,
                 millsLeftToShowMole = 500,
-                chosenHoleIndex = (0..8).random()
+                chosenHoleIndex = (0..amountOfHoles).random()
             )
             _uiState.value = newGameScreenState
         }

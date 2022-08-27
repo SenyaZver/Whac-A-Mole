@@ -5,8 +5,10 @@ object Constants {
     val gameScreenRoute = "Game_Screen"
     val resultScreenRoute = "Result_Screen"
 
-    val gameDuration: Long = 3
+
     val highscoreParam = "highscore"
     val highscoreDataStoreName = "Highscore_Store"
 
+    val gameDuration: Long = 3
+    val amountOfHoles: Int = 6
 }

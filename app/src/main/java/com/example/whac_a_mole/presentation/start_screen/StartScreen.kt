@@ -1,16 +1,17 @@
 package com.example.whac_a_mole.presentation.start_screen
 
-import androidx.compose.foundation.BorderStroke
+
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,7 +19,7 @@ import androidx.navigation.NavController
 import com.example.whac_a_mole.common.Constants.gameScreenRoute
 import com.example.whac_a_mole.presentation.common.StyledButton
 import com.example.whac_a_mole.presentation.theme.Dimensions.spacerHeight
-import com.example.whac_a_mole.presentation.theme.WhacAMoleTheme
+
 
 @Composable
 
@@ -38,7 +39,8 @@ fun StartScreen(
         WhacAMoleTitle()
 
         Spacer(modifier = Modifier.height(spacerHeight))
-        //add a Mole image
+
+//        Image(painter = painterResource(, contentDescription = "content description")
         Spacer(modifier = Modifier.height(330.dp))
 
         Text(
