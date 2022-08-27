@@ -1,6 +1,6 @@
 package com.example.whac_a_mole.presentation.game_screen
 
-import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,18 +14,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintSet
-import androidx.constraintlayout.compose.layoutId
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.whac_a_mole.common.Constants.amountOfHoles
 import com.example.whac_a_mole.common.Constants.resultScreenRoute
+import com.example.whac_a_mole.common.Constants.startScreenRoute
 import com.example.whac_a_mole.presentation.theme.Dimensions.spacerHeight
 
 
 @OptIn(ExperimentalFoundationApi::class)
-@SuppressLint("UnrememberedMutableState")
 @Composable
 fun GameScreen(
     navController: NavController,
@@ -34,26 +31,13 @@ fun GameScreen(
     val state = viewModel.uiState.collectAsState()
 
 
-    val constrains = ConstraintSet {
-        val infoBox = createRefFor("infoBox")
-        val hole1 = createRefFor("holes")
-
-        constrain(infoBox) {
-            top.linkTo(parent.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }
-
-        constrain(hole1) {
-            top.linkTo(infoBox.bottom, margin = spacerHeight)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }
-    }
-
-    ConstraintLayout(constraintSet = constrains, modifier = Modifier.background(MaterialTheme.colors.primary).fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .background(MaterialTheme.colors.primary)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Box(modifier = Modifier
-            .layoutId("infoBox")
             .height(50.dp)
             .background(MaterialTheme.colors.primaryVariant)
             .fillMaxWidth()
@@ -77,8 +61,9 @@ fun GameScreen(
         }
 
 
+        Spacer(modifier = Modifier.height(spacerHeight))
+
         LazyVerticalGrid(
-            modifier = Modifier.layoutId("holes"),
             cells = GridCells.Fixed(3),
             contentPadding = PaddingValues(20.dp)
         ) {
@@ -91,22 +76,22 @@ fun GameScreen(
                     }
                 )
             }
-
-
         }
 
 
+
         if (state.value.timeLeft == 0L) {
-            viewModel.saveScore(state.value.score)
+            viewModel.gameEnded(state.value.score)
 
             LaunchedEffect(Unit) {
                 navController.navigate(resultScreenRoute)
             }
         }
 
-
-
-
+        BackHandler {
+            viewModel.gameCancelled()
+            navController.navigate(startScreenRoute)
+        }
 
     }
 

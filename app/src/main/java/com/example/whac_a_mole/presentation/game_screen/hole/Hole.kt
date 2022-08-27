@@ -45,9 +45,4 @@ fun Hole(
             contentDescription = "Mole is here!")
     }
 
-
-
-
-
-
 }

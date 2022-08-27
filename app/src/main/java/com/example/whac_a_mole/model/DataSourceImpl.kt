@@ -1,4 +1,4 @@
-package com.example.whac_a_mole.data
+package com.example.whac_a_mole.model
 
 import android.content.Context
 import androidx.datastore.DataStore

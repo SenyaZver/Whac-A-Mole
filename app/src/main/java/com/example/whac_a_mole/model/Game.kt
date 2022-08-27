@@ -1,6 +1,7 @@
-package com.example.whac_a_mole.data
+package com.example.whac_a_mole.model
 
 import android.os.CountDownTimer
+import android.util.Log
 import com.example.whac_a_mole.common.Constants
 import com.example.whac_a_mole.domain.DataSource
 import com.example.whac_a_mole.presentation.game_screen.GameScreenState
@@ -33,6 +34,13 @@ class Game @Inject constructor(
         }
     }
 
+    fun stop() {
+        _gameState.value.gameTimer?.cancel()
+        _gameState.value.moleTimer?.cancel()
+
+        _gameState.value = GameScreenState()
+    }
+
 
     fun changeChosenHole() {
         CoroutineScope(Dispatchers.Unconfined).launch {
@@ -44,18 +52,11 @@ class Game @Inject constructor(
             val currentChosenHoleIndex = _gameState.value.chosenHoleIndex
 
             //update hole states
-            val holeStates = _gameState.value.holeStates.toMutableList()
-            holeStates[currentChosenHoleIndex] = HoleState(id = currentChosenHoleIndex, moleAppears = false)
-            holeStates[newHoleIndex] = newHoleState
+            _gameState.value.holeStates[currentChosenHoleIndex] = HoleState(id = currentChosenHoleIndex, moleAppears = false)
+            _gameState.value.holeStates[newHoleIndex] = newHoleState
 
             //update game state
-            val newGameScreenState = GameScreenState(
-                gameTimer = _gameState.value.gameTimer,
-                timeLeft = _gameState.value.timeLeft,
-                score = _gameState.value.score,
-                chosenHoleIndex = newHoleIndex,
-                holeStates = holeStates
-            )
+            val newGameScreenState = changeState(_gameState.value, chosenHoleIndex = newHoleIndex)
             _gameState.value = newGameScreenState
         }
     }
@@ -63,13 +64,7 @@ class Game @Inject constructor(
     fun holeClicked(index: Int) {
         CoroutineScope(Dispatchers.Unconfined).launch {
             if (_gameState.value.holeStates[index].moleAppears == true) {
-                val newGameScreenState = GameScreenState(
-                    gameTimer = _gameState.value.gameTimer,
-                    timeLeft = _gameState.value.timeLeft,
-                    score = _gameState.value.score + 1,
-                    chosenHoleIndex = _gameState.value.chosenHoleIndex,
-                    holeStates = _gameState.value.holeStates
-                )
+                val newGameScreenState = changeState(_gameState.value, score = _gameState.value.score + 1)
                 _gameState.value = newGameScreenState
             }
         }
@@ -86,34 +81,46 @@ class Game @Inject constructor(
     private fun getGameTimer(timeMillis: Long, interval: Long) =
         object : CountDownTimer(timeMillis, interval) {
 
-
-
             override fun onTick(p0: Long) {
                 CoroutineScope(Dispatchers.Unconfined).launch {
-
-                    val newGameScreenState = GameScreenState(
-                        gameTimer = _gameState.value.gameTimer,
-                        timeLeft = _gameState.value.timeLeft - 1,
-                        score = _gameState.value.score,
-                        chosenHoleIndex = _gameState.value.chosenHoleIndex,
-                        holeStates = _gameState.value.holeStates)
+                    val newGameScreenState = changeState(_gameState.value, timeLeft = _gameState.value.timeLeft - 1)
                     _gameState.value = newGameScreenState
                 }
-
             }
             override fun onFinish() {
+                this.cancel()
             }
         }
 
     private fun getMoleTimer(timeMillis: Long, interval: Long) =
         object : CountDownTimer(timeMillis, interval) {
+
             override fun onTick(p0: Long) {
                 changeChosenHole()
             }
             override fun onFinish() {
-
+                this.cancel()
             }
         }
+
+    private fun changeState(
+        state: GameScreenState,
+        gameTimer: CountDownTimer? = state.gameTimer,
+        moleTimer: CountDownTimer? = state.moleTimer,
+        timeLeft: Long = state.timeLeft,
+        score: Int = state.score,
+        chosenHoleIndex: Int = state.chosenHoleIndex,
+        holeStates: MutableList<HoleState> = state.holeStates
+    ): GameScreenState {
+        return GameScreenState(
+            gameTimer = gameTimer,
+            moleTimer = moleTimer,
+            timeLeft = timeLeft,
+            score = score,
+            chosenHoleIndex = chosenHoleIndex,
+            holeStates = holeStates
+        )
+    }
 
 
 
