@@ -39,7 +39,8 @@ class GameScreenViewModel @Inject constructor(
                 timer = _uiState.value.timer,
                 timeLeft = _uiState.value.timeLeft,
                 score = _uiState.value.score + 1,
-                millsLeftToShowMole = _uiState.value.millsLeftToShowMole
+                millsLeftToShowMole = _uiState.value.millsLeftToShowMole,
+                holeStates = _uiState.value.holeStates
             )
             _uiState.value = newGameScreenState
         }
@@ -52,7 +53,8 @@ class GameScreenViewModel @Inject constructor(
                 timeLeft = _uiState.value.timeLeft,
                 score = _uiState.value.score,
                 millsLeftToShowMole = 500,
-                chosenHoleIndex = (0..amountOfHoles).random()
+                chosenHoleIndex = (0..amountOfHoles).random(),
+                holeStates = _uiState.value.holeStates
             )
             _uiState.value = newGameScreenState
         }
@@ -71,7 +73,8 @@ class GameScreenViewModel @Inject constructor(
                         timer = _uiState.value.timer,
                         timeLeft = _uiState.value.timeLeft - 1,
                         score = _uiState.value.score,
-                        millsLeftToShowMole = _uiState.value.millsLeftToShowMole
+                        millsLeftToShowMole = _uiState.value.millsLeftToShowMole,
+                        holeStates = _uiState.value.holeStates
                     )
                     _uiState.value = newGameScreenState
 

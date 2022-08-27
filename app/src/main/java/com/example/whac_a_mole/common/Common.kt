@@ -9,6 +9,6 @@ object Constants {
     val highscoreParam = "highscore"
     val highscoreDataStoreName = "Highscore_Store"
 
-    val gameDuration: Long = 3
+    val gameDuration: Long = 30
     val amountOfHoles: Int = 6
 }

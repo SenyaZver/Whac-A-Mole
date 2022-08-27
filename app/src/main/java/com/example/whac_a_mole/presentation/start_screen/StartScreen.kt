@@ -1,6 +1,7 @@
 package com.example.whac_a_mole.presentation.start_screen
 
 
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,7 @@ import androidx.navigation.NavController
 import com.example.whac_a_mole.common.Constants.gameScreenRoute
 import com.example.whac_a_mole.presentation.common.StyledButton
 import com.example.whac_a_mole.presentation.theme.Dimensions.spacerHeight
+import com.example.whac_a_mole.R
 
 
 @Composable
@@ -40,8 +42,9 @@ fun StartScreen(
 
         Spacer(modifier = Modifier.height(spacerHeight))
 
-//        Image(painter = painterResource(, contentDescription = "content description")
-        Spacer(modifier = Modifier.height(330.dp))
+        Image(painter = painterResource(R.drawable.ic_mole2), contentDescription = "Mole")
+
+        Spacer(modifier = Modifier.height(spacerHeight * 2))
 
         Text(
             modifier = Modifier.align(Alignment.CenterHorizontally),

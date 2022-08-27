@@ -1,8 +1,12 @@
 package com.example.whac_a_mole.presentation.game_screen
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,10 +20,14 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.layoutId
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.whac_a_mole.common.Constants.amountOfHoles
 import com.example.whac_a_mole.common.Constants.resultScreenRoute
 import com.example.whac_a_mole.domain.DataSource
+import com.example.whac_a_mole.presentation.game_screen.hole.HoleState
+import com.example.whac_a_mole.presentation.theme.Dimensions.spacerHeight
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun GameScreen(
@@ -31,7 +39,7 @@ fun GameScreen(
 
     val constrains = ConstraintSet {
         val infoBox = createRefFor("infoBox")
-        val hole1 = createRefFor("hole1")
+        val hole1 = createRefFor("holes")
 
         constrain(infoBox) {
             top.linkTo(parent.top)
@@ -40,9 +48,9 @@ fun GameScreen(
         }
 
         constrain(hole1) {
-            top.linkTo(parent.top)
-            end.linkTo(parent.end, margin = 40.dp)
-            bottom.linkTo(parent.bottom)
+            top.linkTo(infoBox.bottom, margin = spacerHeight)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
         }
     }
 
@@ -71,12 +79,29 @@ fun GameScreen(
             }
         }
 
-        Hole(
-            modifier = Modifier.layoutId("hole1"),
-            onClick = {
-                viewModel.increaseScore()
+
+        LazyVerticalGrid(
+            modifier = Modifier.layoutId("holes"),
+            cells = GridCells.Fixed(3),
+            contentPadding = PaddingValues(20.dp)
+        ) {
+            items(amountOfHoles) {index ->
+                Hole(
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 100.dp),
+                    holeState = state.value.holeStates[index],
+                    onClick = {
+                        state.value.holeStates[index] = HoleState(moleAppears = true, id = index)
+
+                        Log.d("debugScreen", state.value.holeStates[index].moleAppears.toString())
+
+                        viewModel.increaseScore()
+                    }
+                )
             }
-        )
+
+
+        }
+
 
 
 
