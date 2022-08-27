@@ -90,11 +90,7 @@ fun GameScreen(
                     modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 100.dp),
                     holeState = state.value.holeStates[index],
                     onClick = {
-                        state.value.holeStates[index] = HoleState(moleAppears = true, id = index)
-
-                        Log.d("debugScreen", state.value.holeStates[index].moleAppears.toString())
-
-                        viewModel.increaseScore()
+                        viewModel.holeClicked(index)
                     }
                 )
             }

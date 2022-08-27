@@ -26,7 +26,6 @@ fun Hole(
     onClick: (() -> Unit)
 ){
     if (!holeState.moleAppears) {
-        Log.d("debugHole", holeState.moleAppears.toString())
         Card(
             modifier = modifier.height(55.dp).width(90.dp),
             backgroundColor = MaterialTheme.colors.secondary,
