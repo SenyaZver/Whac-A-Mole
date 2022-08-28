@@ -22,7 +22,12 @@ class GameScreenViewModel @Inject constructor(
             game.start()
 
             game.gameState.collect {gameState ->
-                uiState.value = gameState
+                uiState.value = GameScreenState(
+                    timeLeft = gameState.timeLeft,
+                    score = gameState.score,
+                    chosenHoleIndex = gameState.chosenHoleIndex,
+                    holeStates = gameState.holeStates
+                )
             }
         }
     }

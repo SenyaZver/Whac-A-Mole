@@ -5,7 +5,7 @@ import com.example.whac_a_mole.common.Constants
 import com.example.whac_a_mole.domain.DataSource
 import com.example.whac_a_mole.domain.GameInterface
 import com.example.whac_a_mole.presentation.game_screen.GameScreenState
-import com.example.whac_a_mole.presentation.game_screen.hole.HoleState
+import com.example.whac_a_mole.presentation.common.hole.HoleState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -17,13 +17,13 @@ class Game @Inject constructor(
     private val dataSource: DataSource
 ): GameInterface {
 
-    private val _gameState = MutableStateFlow(GameScreenState())
-    val gameState: StateFlow<GameScreenState> = _gameState
+    private val _gameState = MutableStateFlow(GameState())
+    val gameState: StateFlow<GameState> = _gameState
 
 
     override fun start() {
         CoroutineScope(Dispatchers.Unconfined).launch {
-            _gameState.value = GameScreenState(
+            _gameState.value = GameState(
                 gameTimer = getGameTimer(Constants.gameDuration * 1000, 1000),
                 moleTimer = getMoleTimer(Constants.gameDuration * 1000, 500)
             )
@@ -38,7 +38,7 @@ class Game @Inject constructor(
         _gameState.value.gameTimer?.cancel()
         _gameState.value.moleTimer?.cancel()
 
-        _gameState.value = GameScreenState()
+        _gameState.value = GameState()
     }
 
 
@@ -63,7 +63,10 @@ class Game @Inject constructor(
 
     override fun holeClicked(index: Int) {
         CoroutineScope(Dispatchers.Unconfined).launch {
-            if (_gameState.value.holeStates[index].moleAppears == true) {
+            val clickedHoleState = _gameState.value.holeStates[index]
+
+            if (clickedHoleState.moleAppears && clickedHoleState.moleClicked == false) {
+                _gameState.value.holeStates[index] = HoleState(id = index, moleAppears = true, moleClicked = true)
 
                 val newGameScreenState = changeState(_gameState.value, score = _gameState.value.score + 1)
                 _gameState.value = newGameScreenState
@@ -105,15 +108,15 @@ class Game @Inject constructor(
         }
 
     private fun changeState(
-        state: GameScreenState,
+        state: GameState,
         gameTimer: CountDownTimer? = state.gameTimer,
         moleTimer: CountDownTimer? = state.moleTimer,
         timeLeft: Long = state.timeLeft,
         score: Int = state.score,
         chosenHoleIndex: Int = state.chosenHoleIndex,
         holeStates: MutableList<HoleState> = state.holeStates
-    ): GameScreenState {
-        return GameScreenState(
+    ): GameState {
+        return GameState(
             gameTimer = gameTimer,
             moleTimer = moleTimer,
             timeLeft = timeLeft,

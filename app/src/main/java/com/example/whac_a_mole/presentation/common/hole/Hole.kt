@@ -13,7 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.whac_a_mole.R
-import com.example.whac_a_mole.presentation.game_screen.hole.HoleState
+import com.example.whac_a_mole.presentation.common.hole.HoleState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
