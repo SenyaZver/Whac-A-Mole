@@ -1,7 +1,6 @@
 package com.example.whac_a_mole.model
 
 import android.os.CountDownTimer
-import android.util.Log
 import com.example.whac_a_mole.common.Constants
 import com.example.whac_a_mole.domain.DataSource
 import com.example.whac_a_mole.domain.GameInterface
