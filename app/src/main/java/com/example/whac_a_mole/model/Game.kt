@@ -9,18 +9,16 @@ import com.example.whac_a_mole.presentation.game_screen.hole.HoleState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class Game @Inject constructor(
     private val dataSource: DataSource
 ): GameInterface {
+
     private val _gameState = MutableStateFlow(GameScreenState())
     val gameState: StateFlow<GameScreenState> = _gameState
-
 
 
     override fun start() {
@@ -32,6 +30,7 @@ class Game @Inject constructor(
             delay(1000)
             _gameState.value.gameTimer?.start()
             _gameState.value.moleTimer?.start()
+
         }
     }
 
@@ -65,9 +64,10 @@ class Game @Inject constructor(
     override fun holeClicked(index: Int) {
         CoroutineScope(Dispatchers.Unconfined).launch {
             if (_gameState.value.holeStates[index].moleAppears == true) {
-                val newGameScreenState = changeState(_gameState.value, score = _gameState.value.score + 1)
 
+                val newGameScreenState = changeState(_gameState.value, score = _gameState.value.score + 1)
                 _gameState.value = newGameScreenState
+
             }
         }
     }
@@ -84,9 +84,6 @@ class Game @Inject constructor(
 
             override fun onTick(p0: Long) {
                 CoroutineScope(Dispatchers.Unconfined).launch {
-                    _gameState.update{currentState ->
-                        currentState.copy(timeLeft = currentState.timeLeft--)
-                    }
                     val newGameScreenState = changeState(_gameState.value, timeLeft = _gameState.value.timeLeft - 1)
                     _gameState.value = newGameScreenState
                 }

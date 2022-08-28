@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.whac_a_mole.model.Game
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,8 +14,8 @@ import javax.inject.Inject
 class GameScreenViewModel @Inject constructor(
     private val game: Game
 ): ViewModel() {
-    val uiState = MutableStateFlow(GameScreenState())
 
+    val uiState = MutableStateFlow(GameScreenState())
 
     init {
         viewModelScope.launch {
@@ -26,7 +25,6 @@ class GameScreenViewModel @Inject constructor(
                 uiState.value = gameState
             }
         }
-
     }
 
 
