@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import com.example.whac_a_mole.common.Constants
 import com.example.whac_a_mole.domain.DataSource
+import com.example.whac_a_mole.domain.GameInterface
 import com.example.whac_a_mole.presentation.game_screen.GameScreenState
 import com.example.whac_a_mole.presentation.game_screen.hole.HoleState
 import kotlinx.coroutines.CoroutineScope
@@ -11,18 +12,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class Game @Inject constructor(
     private val dataSource: DataSource
-) {
+): GameInterface {
     private val _gameState = MutableStateFlow(GameScreenState())
     val gameState: StateFlow<GameScreenState> = _gameState
 
 
 
-    fun start() {
+    override fun start() {
         CoroutineScope(Dispatchers.Unconfined).launch {
             _gameState.value = GameScreenState(
                 gameTimer = getGameTimer(Constants.gameDuration * 1000, 1000),
@@ -34,7 +36,7 @@ class Game @Inject constructor(
         }
     }
 
-    fun stop() {
+    override fun stop() {
         _gameState.value.gameTimer?.cancel()
         _gameState.value.moleTimer?.cancel()
 
@@ -42,7 +44,7 @@ class Game @Inject constructor(
     }
 
 
-    fun changeChosenHole() {
+    override fun changeChosenHole() {
         CoroutineScope(Dispatchers.Unconfined).launch {
             //generate new chosen hole
             val newHoleIndex = (0..Constants.amountOfHoles -1).random()
@@ -61,19 +63,19 @@ class Game @Inject constructor(
         }
     }
 
-    fun holeClicked(index: Int) {
+    override fun holeClicked(index: Int) {
         CoroutineScope(Dispatchers.Unconfined).launch {
             if (_gameState.value.holeStates[index].moleAppears == true) {
                 val newGameScreenState = changeState(_gameState.value, score = _gameState.value.score + 1)
+
                 _gameState.value = newGameScreenState
             }
         }
     }
 
-
-    fun saveScore(score: Int) {
+    override fun saveScore() {
         CoroutineScope(Dispatchers.Unconfined).launch {
-            dataSource.setCurrentScore(score)
+            dataSource.setCurrentScore(gameState.value.score)
         }
     }
 
@@ -83,6 +85,9 @@ class Game @Inject constructor(
 
             override fun onTick(p0: Long) {
                 CoroutineScope(Dispatchers.Unconfined).launch {
+                    _gameState.update{currentState ->
+                        currentState.copy(timeLeft = currentState.timeLeft--)
+                    }
                     val newGameScreenState = changeState(_gameState.value, timeLeft = _gameState.value.timeLeft - 1)
                     _gameState.value = newGameScreenState
                 }

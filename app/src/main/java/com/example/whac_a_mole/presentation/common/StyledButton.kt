@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun StyledButton(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
+fun StyledButton(modifier: Modifier, text: String, onClick: () -> Unit) {
     OutlinedButton(
         modifier = modifier,
         content = {

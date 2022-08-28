@@ -81,7 +81,7 @@ fun GameScreen(
 
 
         if (state.value.timeLeft == 0L) {
-            viewModel.gameEnded(state.value.score)
+            viewModel.gameEnded()
 
             LaunchedEffect(Unit) {
                 navController.navigate(resultScreenRoute)

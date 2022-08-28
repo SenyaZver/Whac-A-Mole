@@ -8,9 +8,9 @@ import com.example.whac_a_mole.presentation.game_screen.hole.HoleState
 data class GameScreenState (
     val gameTimer: CountDownTimer? = null,
     val moleTimer: CountDownTimer? = null,
-    val timeLeft: Long = gameDuration,
-    val score: Int = 0,
-    val chosenHoleIndex: Int = 0,
+    var timeLeft: Long = gameDuration,
+    var score: Int = 0,
+    var chosenHoleIndex: Int = 0,
     val holeStates: MutableList<HoleState> = createHoleStates()
 )
 

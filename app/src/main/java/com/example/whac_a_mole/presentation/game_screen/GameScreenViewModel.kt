@@ -15,8 +15,7 @@ import javax.inject.Inject
 class GameScreenViewModel @Inject constructor(
     private val game: Game
 ): ViewModel() {
-    private val _uiState = MutableStateFlow(GameScreenState())
-    val uiState: StateFlow<GameScreenState> = _uiState
+    val uiState = MutableStateFlow(GameScreenState())
 
 
     init {
@@ -24,7 +23,7 @@ class GameScreenViewModel @Inject constructor(
             game.start()
 
             game.gameState.collect {gameState ->
-                _uiState.value = gameState
+                uiState.value = gameState
             }
         }
 
@@ -36,8 +35,8 @@ class GameScreenViewModel @Inject constructor(
     }
 
 
-    fun gameEnded(score: Int) {
-        game.saveScore(score)
+    fun gameEnded() {
+        game.saveScore()
         game.stop()
     }
 
